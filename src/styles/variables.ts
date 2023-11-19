@@ -1,0 +1,20 @@
+// TODO: 色の優先順位（primaryなど）を追加する
+export const colors = {
+    White: "#FFF",
+    DarkBlue10: "#141031",
+    DarkBlue20: "#1C1C3E",
+    DarkBlue30: "#40406b",
+    LightBlue10: "#f3f3ff",
+    Pink10: "#FC2F7E",
+    LightGreen10: "#05F2AF",
+    LightGreen20: "#37d5a5",
+    LightGreen30: "#63cca9",
+    Gray10: "#333",
+    Gray20: "#696969",
+    Gray30: "#808080",
+    Gray40: "#A9A9A9",
+    Gray50: "#C0C0C0",
+    Gray60: "#DCDCDC",
+    Gray70: "#FAFAFA",
+    LightPurple10: "#6F748E",
+} as const;
