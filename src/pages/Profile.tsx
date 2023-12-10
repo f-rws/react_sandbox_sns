@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { css } from "@emotion/react";
-import { apiClient } from "../api";
+import { apiClient } from "../repositories/apiClient.ts";
 import { getImgPath } from "../functions/utils.ts";
 import { Post as TypePost } from "../types/post.ts";
 import { Topbar } from "../components/Topbar.tsx";

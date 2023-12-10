@@ -1,7 +1,7 @@
 import { Analytics, Face, Gif, Image } from "@mui/icons-material";
 import { FormEvent, useRef, useState } from "react";
 import { useAuthState } from "../globalStates/authState.ts";
-import { apiClient } from "../api";
+import { apiClient } from "../repositories/apiClient.ts";
 
 type Props = {
     fetchPosts: () => Promise<void>;

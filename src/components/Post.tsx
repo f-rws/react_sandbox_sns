@@ -6,7 +6,7 @@ import { getImgPath } from "../functions/utils.ts";
 import { Post as TypePost } from "../types/post.ts";
 import { User } from "../types/user.ts";
 import { useEffect, useState } from "react";
-import { apiClient } from "../api";
+import { apiClient } from "../repositories/apiClient.ts";
 import noAvatarImg from "../assets/person/noAvatar.png";
 import { useAuthState } from "../globalStates/authState.ts";
 

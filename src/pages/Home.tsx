@@ -6,7 +6,7 @@ import { Post } from "../components/Post.tsx";
 import { Rightbar } from "../components/Rightbar.tsx";
 import { useEffect, useState } from "react";
 import { Post as TypePost } from "../types/post.ts";
-import { apiClient } from "../api";
+import { apiClient } from "../repositories/apiClient.ts";
 import { useAuthState } from "../globalStates/authState.ts";
 
 export const Home = () => {
