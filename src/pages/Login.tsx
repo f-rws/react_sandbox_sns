@@ -1,10 +1,13 @@
 import { FormEvent, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { colors } from "../styles/variables.ts";
-import { apiClient } from "../api";
 import { useAuthState, useAuthStateMutators } from "../globalStates/authState.ts";
+import { authRepository } from "../repositories/auth/repository.ts";
+import { LoginUserData } from "../repositories/auth/types.ts";
 
 export const Login = () => {
+    const { loginUser } = authRepository;
+
     const { user, isFetching, error } = useAuthState();
     const { setAuthState } = useAuthStateMutators();
 
@@ -23,17 +26,17 @@ export const Login = () => {
             execLogin(data);
         }
     };
-    const execLogin = async (data: { email: string; password: string }) => {
+    const execLogin = async (data: LoginUserData) => {
         try {
-            const res = await apiClient.post("/auth/login", data);
+            const resData = await loginUser(data);
             setAuthState({
                 isFetching,
                 error,
-                user: res.data,
+                user: resData,
             });
 
             // ローカルストレージにユーザー情報を保存
-            localStorage.setItem("user", JSON.stringify(res.data));
+            localStorage.setItem("user", JSON.stringify(resData));
         } catch (e) {
             // TODO: type修正
             // @ts-ignore
