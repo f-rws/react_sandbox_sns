@@ -36,7 +36,7 @@ const putFollowUser = async (
 
 // ユーザーのフォロー解除
 const putUnfollowUser = async (
-    userId: string, // フォローされる側のID,
+    userId: string, // フォロー解除される側のID,
     data: PutUnfollowUserRequestData,
 ): Promise<null> => {
     const res = await apiClient.put<null>(`/users/${userId}/unfollow`, data);

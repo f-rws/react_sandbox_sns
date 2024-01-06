@@ -30,5 +30,5 @@ export type PutFollowUserRequestData = {
 
 // ユーザーのフォロー解除
 export type PutUnfollowUserRequestData = {
-    userId: string; // フォローする側のID
+    userId: string; // フォロー解除する側のID
 };
