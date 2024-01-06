@@ -9,6 +9,7 @@ import { ProfileDetail } from "./ProfileDetail.tsx";
 import { Post } from "../components/Post.tsx";
 import { User } from "../types/user.ts";
 import { useParams } from "react-router-dom";
+import { postsRepository } from "../repositories/posts/repository.ts";
 
 const styles = {
     wrapper: css({
@@ -59,6 +60,7 @@ const styles = {
 
 export const Profile = () => {
     const { username } = useParams();
+    const { getPostsByUser } = postsRepository;
 
     const [user, setUser] = useState<User | null>(null);
     const [posts, setPosts] = useState<TypePost[]>([]);
@@ -73,8 +75,9 @@ export const Profile = () => {
         setUser(res.data);
     };
     const fetchPosts = async () => {
-        const res = await apiClient.get(`/posts/profile/${username}`);
-        setPosts(res.data);
+        if (!username) return;
+        const data = await getPostsByUser(username);
+        setPosts(data);
     };
     return (
         <>

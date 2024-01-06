@@ -2,6 +2,8 @@ import { Analytics, Face, Gif, Image } from "@mui/icons-material";
 import { FormEvent, useRef, useState } from "react";
 import { useAuthState } from "../globalStates/authState.ts";
 import { apiClient } from "../repositories/apiClient.ts";
+import { postsRepository } from "../repositories/posts/repository.ts";
+import { CreatePostRequestData } from "../repositories/posts/types.ts";
 
 type Props = {
     fetchPosts: () => Promise<void>;
@@ -9,6 +11,7 @@ type Props = {
 
 export const Share = ({ fetchPosts }: Props) => {
     const { user } = useAuthState();
+    const { createPost } = postsRepository;
 
     const [imageFile, setImageFile] = useState<FileList | null>(null);
     const ref = useRef<HTMLInputElement>(null);
@@ -19,8 +22,8 @@ export const Share = ({ fetchPosts }: Props) => {
         if (!user) return;
         if (!ref?.current?.value) return;
 
-        const newPost = {
-            userId: user._id,
+        const newPost: CreatePostRequestData = {
+            userId: user._id.toString(),
             desc: ref.current.value,
             img: "",
         };
@@ -38,7 +41,7 @@ export const Share = ({ fetchPosts }: Props) => {
             await apiClient.post("/upload", formData);
         }
 
-        await apiClient.post("/posts", newPost);
+        await createPost(newPost);
         await fetchPosts();
     };
     return (

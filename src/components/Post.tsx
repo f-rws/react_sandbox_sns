@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { apiClient } from "../repositories/apiClient.ts";
 import noAvatarImg from "../assets/person/noAvatar.png";
 import { useAuthState } from "../globalStates/authState.ts";
+import { postsRepository } from "../repositories/posts/repository.ts";
+import { PutPostLikeRequestData } from "../repositories/posts/types.ts";
 
 const styles = {
     wrapper: css({
@@ -72,6 +74,7 @@ export const Post = ({ post }: Props) => {
     const { userId, desc, img, createdAt, comment } = post;
 
     const { user: currentUser } = useAuthState();
+    const { putPostLike } = postsRepository;
 
     const [user, setUser] = useState<User | null>(null);
     const [like, setLike] = useState<number>(post.likes.length);
@@ -93,11 +96,12 @@ export const Post = ({ post }: Props) => {
 
     // いいね押下
     const handleLike = async () => {
-        const data = {
-            userId: currentUser?._id,
+        if (!currentUser) return;
+        const data: PutPostLikeRequestData = {
+            userId: currentUser._id.toString(),
         };
         try {
-            await apiClient.put(`/posts/${post._id}/like`, data);
+            await putPostLike(post._id, data);
         } catch (e) {
             console.log(e);
         }
