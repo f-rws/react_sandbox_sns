@@ -9,13 +9,13 @@ const getPosts = async (userId: string): Promise<PostData[]> => {
 
 // プロフィール専用のタイムラインの取得
 const getPostsByUser = async (userName: string): Promise<PostData[]> => {
-    const res = await apiClient.get<PostData[]>(`/posts/timeline/${userName}`);
+    const res = await apiClient.get<PostData[]>(`/posts/profile/${userName}`);
     return res.data;
 };
 
 // 特定の投稿を取得する
 const getPost = async (postId: string): Promise<PostData> => {
-    const res = await apiClient.get<PostData>(`/posts/timeline/${postId}`);
+    const res = await apiClient.get<PostData>(`/posts/${postId}`);
     return res.data;
 };
 
