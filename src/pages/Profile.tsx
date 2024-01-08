@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { css } from "@emotion/react";
-import { apiClient } from "../repositories/apiClient.ts";
 import { getImgPath } from "../functions/utils.ts";
 import { Post as TypePost } from "../types/post.ts";
 import { Topbar } from "../components/Topbar.tsx";
@@ -10,6 +9,7 @@ import { Post } from "../components/Post.tsx";
 import { User } from "../types/user.ts";
 import { useParams } from "react-router-dom";
 import { postsRepository } from "../repositories/posts/repository.ts";
+import { usersRepository } from "../repositories/users/repository.ts";
 
 const styles = {
     wrapper: css({
@@ -60,6 +60,7 @@ const styles = {
 
 export const Profile = () => {
     const { username } = useParams();
+    const { getUser } = usersRepository;
     const { getPostsByUser } = postsRepository;
 
     const [user, setUser] = useState<User | null>(null);
@@ -71,8 +72,10 @@ export const Profile = () => {
     }, []);
 
     const fetchUser = async () => {
-        const res = await apiClient.get(`/users/?username=${username}`);
-        setUser(res.data);
+        if (!username) return;
+        const params = { username };
+        const data = await getUser(params);
+        setUser(data);
     };
     const fetchPosts = async () => {
         if (!username) return;

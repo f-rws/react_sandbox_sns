@@ -6,11 +6,11 @@ import { getImgPath } from "../functions/utils.ts";
 import { Post as TypePost } from "../types/post.ts";
 import { User } from "../types/user.ts";
 import { useEffect, useState } from "react";
-import { apiClient } from "../repositories/apiClient.ts";
 import noAvatarImg from "../assets/person/noAvatar.png";
 import { useAuthState } from "../globalStates/authState.ts";
 import { postsRepository } from "../repositories/posts/repository.ts";
 import { PutPostLikeRequestData } from "../repositories/posts/types.ts";
+import { usersRepository } from "../repositories/users/repository.ts";
 
 const styles = {
     wrapper: css({
@@ -74,6 +74,7 @@ export const Post = ({ post }: Props) => {
     const { userId, desc, img, createdAt, comment } = post;
 
     const { user: currentUser } = useAuthState();
+    const { getUser } = usersRepository;
     const { putPostLike } = postsRepository;
 
     const [user, setUser] = useState<User | null>(null);
@@ -86,8 +87,11 @@ export const Post = ({ post }: Props) => {
 
     // ユーザー情報取得
     const fetchUser = async () => {
-        const res = await apiClient.get(`/users/?userId=${userId}`);
-        setUser(res.data);
+        const params = {
+            userId: userId.toString(),
+        };
+        const data = await getUser(params);
+        setUser(data);
     };
 
     const selectProfilePicture = (user: User) => {
