@@ -1,11 +1,13 @@
 import { useState, FormEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { css } from "@emotion/react";
-import { apiClient } from "../api";
 import { colors } from "../styles/variables.ts";
+import { authRepository } from "../repositories/auth/repository.ts";
+import { ResisterUserData } from "../repositories/auth/types.ts";
 
 export const Register = () => {
     const navigate = useNavigate();
+    const { resisterUser } = authRepository;
 
     const username = useRef<HTMLInputElement>(null);
     const email = useRef<HTMLInputElement>(null);
@@ -32,9 +34,9 @@ export const Register = () => {
             execRegister(data);
         }
     };
-    const execRegister = async (data: { username: string; email: string; password: string }) => {
+    const execRegister = async (data: ResisterUserData) => {
         try {
-            await apiClient.post("/auth/register", data);
+            await resisterUser(data);
             navigate("/login");
         } catch (e) {
             // TODO: type修正

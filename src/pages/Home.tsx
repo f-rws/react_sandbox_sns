@@ -6,11 +6,12 @@ import { Post } from "../components/Post.tsx";
 import { Rightbar } from "../components/Rightbar.tsx";
 import { useEffect, useState } from "react";
 import { Post as TypePost } from "../types/post.ts";
-import { apiClient } from "../api";
 import { useAuthState } from "../globalStates/authState.ts";
+import { postsRepository } from "../repositories/posts/repository.ts";
 
 export const Home = () => {
     const { user } = useAuthState();
+    const { getPosts } = postsRepository;
 
     const [posts, setPosts] = useState<TypePost[]>([]);
 
@@ -19,8 +20,9 @@ export const Home = () => {
     }, []);
 
     const fetchPosts = async () => {
-        const res = await apiClient.get(`/posts/timeline/${user?._id}`);
-        setPosts(res.data);
+        if (!user?._id) return;
+        const data = await getPosts(user._id.toString());
+        setPosts(data);
     };
     return (
         <>
