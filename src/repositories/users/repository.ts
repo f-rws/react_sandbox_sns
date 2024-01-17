@@ -1,14 +1,14 @@
 import { apiClient } from "../apiClient.ts";
 import {
     UserData,
-    GetUserParams,
+    GetUserParamsData,
     PutFollowUserRequestData,
     PutUnfollowUserRequestData,
     PutUserRequestData,
 } from "./types.ts";
 
 // クエリーパラメータから特定のユーザーを取得
-const getUser = async (params: GetUserParams): Promise<UserData> => {
+const getUser = async (params: GetUserParamsData): Promise<UserData> => {
     const res = await apiClient.get<UserData>("/users", { params });
     return res.data;
 };

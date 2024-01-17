@@ -12,7 +12,7 @@ export type UserData = {
 };
 
 // クエリーパラメータから特定のユーザーを取得
-export type GetUserParams = {
+export type GetUserParamsData = {
     userId?: string;
     username?: string;
 };
