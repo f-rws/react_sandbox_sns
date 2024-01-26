@@ -6,77 +6,22 @@ import { Topbar } from "../components/Topbar.tsx";
 import { Sidebar } from "../components/Sidebar.tsx";
 import { ProfileDetail } from "./ProfileDetail.tsx";
 import { Post } from "../components/Post.tsx";
-import { User } from "../types/user.ts";
 import { useParams } from "react-router-dom";
 import { postsRepository } from "../repositories/posts/repository.ts";
-import { usersRepository } from "../repositories/users/repository.ts";
-
-const styles = {
-    wrapper: css({
-        display: "flex",
-        maxWidth: "108rem",
-        width: "100%",
-        margin: "0 auto",
-        justifyContent: "stretch",
-    }),
-    pageLeft: css({
-        width: "25%",
-    }),
-    pageMain: css({
-        width: "75%",
-    }),
-    profileSummary: css({
-        width: "100%",
-        height: "30rem",
-        position: "relative",
-    }),
-    profileCover: css({
-        width: "100%",
-        height: "30rem",
-        objectFit: "cover",
-    }),
-    profileIcon: css({
-        position: "absolute",
-        width: "10rem",
-        height: "10rem",
-        objectFit: "contain",
-        left: "calc(50% - 5rem)", // 自身のwidth分を引いている
-        top: "25rem",
-    }),
-    profileName: css({
-        textAlign: "center",
-        marginTop: "5rem",
-
-        "> h4": {
-            fontSize: "2.4rem",
-        },
-    }),
-    content: {
-        display: "flex",
-    },
-    contentMain: {},
-    contentAside: {},
-};
+import { useGetUser } from "@/hooks/call-api-users/getUser.ts";
 
 export const Profile = () => {
     const { username } = useParams();
-    const { getUser } = usersRepository;
-    const { getPostsByUser } = postsRepository;
 
-    const [user, setUser] = useState<User | null>(null);
+    const { getPostsByUser } = postsRepository;
+    const { user, fetchUser } = useGetUser();
     const [posts, setPosts] = useState<TypePost[]>([]);
 
     useEffect(() => {
-        fetchUser();
+        fetchUser({ username });
         fetchPosts();
     }, []);
 
-    const fetchUser = async () => {
-        if (!username) return;
-        const params = { username };
-        const data = await getUser(params);
-        setUser(data);
-    };
     const fetchPosts = async () => {
         if (!username) return;
         const data = await getPostsByUser(username);
@@ -124,4 +69,51 @@ export const Profile = () => {
             </div>
         </>
     );
+};
+
+const styles = {
+    wrapper: css({
+        display: "flex",
+        maxWidth: "108rem",
+        width: "100%",
+        margin: "0 auto",
+        justifyContent: "stretch",
+    }),
+    pageLeft: css({
+        width: "25%",
+    }),
+    pageMain: css({
+        width: "75%",
+    }),
+    profileSummary: css({
+        width: "100%",
+        height: "30rem",
+        position: "relative",
+    }),
+    profileCover: css({
+        width: "100%",
+        height: "30rem",
+        objectFit: "cover",
+    }),
+    profileIcon: css({
+        position: "absolute",
+        width: "10rem",
+        height: "10rem",
+        objectFit: "contain",
+        left: "calc(50% - 5rem)", // 自身のwidth分を引いている
+        top: "25rem",
+    }),
+    profileName: css({
+        textAlign: "center",
+        marginTop: "5rem",
+
+        "> h4": {
+            fontSize: "2.4rem",
+        },
+    }),
+    content: {
+        display: "flex",
+    },
+    contentMain: {},
+    contentAside: {},
 };
