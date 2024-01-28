@@ -10,7 +10,7 @@ import noAvatarImg from "../assets/person/noAvatar.png";
 import { useAuthState } from "../globalStates/authState.ts";
 import { postsRepository } from "../repositories/posts/repository.ts";
 import { PutPostLikeRequestData } from "../repositories/posts/types.ts";
-import { usersRepository } from "../repositories/users/repository.ts";
+import { useGetUser } from "@/hooks/call-api-users/getUser.ts";
 
 const styles = {
     wrapper: css({
@@ -74,25 +74,16 @@ export const Post = ({ post }: Props) => {
     const { userId, desc, img, createdAt, comment } = post;
 
     const { user: currentUser } = useAuthState();
-    const { getUser } = usersRepository;
+    const { user, fetchUser } = useGetUser();
     const { putPostLike } = postsRepository;
 
-    const [user, setUser] = useState<User | null>(null);
     const [like, setLike] = useState<number>(post.likes.length);
     const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
-        fetchUser();
+        // TODO: ページ側で取得する
+        fetchUser({ userId });
     }, []);
-
-    // ユーザー情報取得
-    const fetchUser = async () => {
-        const params = {
-            userId: userId.toString(),
-        };
-        const data = await getUser(params);
-        setUser(data);
-    };
 
     const selectProfilePicture = (user: User) => {
         return user.profilePicture ? getImgPath(`${user.profilePicture}`) : noAvatarImg;
