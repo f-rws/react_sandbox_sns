@@ -1,4 +1,4 @@
-import { GetUserParamsData, PutUserRequestData } from "@/repositories/users/types.ts";
+import { GetUserParamsData, PutUnfollowUserRequestData, PutUserRequestData } from "@/repositories/users/types.ts";
 import { User } from "@/types/user.ts";
 
 /*
@@ -21,9 +21,18 @@ export const convertUserParamsToData = (params: UserParams): GetUserParamsData =
 /*
  * usePutUser
  */
-export const convertUserToData = ({ _id, desc }: User): PutUserRequestData => {
+export const convertUserToPutUserData = ({ _id, desc }: User): PutUserRequestData => {
     return {
         userId: _id.toString(),
         desc,
+    };
+};
+
+/*
+ * usePutFollowUser
+ */
+export const convertUserToPutFollowUserData = ({ _id }: User): PutUnfollowUserRequestData => {
+    return {
+        userId: _id.toString(),
     };
 };
