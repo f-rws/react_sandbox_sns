@@ -13,7 +13,7 @@ export const Home = () => {
     const { posts, fetchPosts } = useGetPosts();
 
     useEffect(() => {
-        if (!user?._id) return;
+        if (!user) return;
         fetchPosts(user._id);
     }, []);
     return (
