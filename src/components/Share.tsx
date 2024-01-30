@@ -1,16 +1,15 @@
-import { Analytics, Face, Gif, Image } from "@mui/icons-material";
 import { FormEvent, useRef, useState } from "react";
+import { Analytics, Face, Gif, Image } from "@mui/icons-material";
+import { useGetPosts } from "@/hooks/call-api-posts/getPosts.ts";
 import { useAuthState } from "../globalStates/authState.ts";
 import { postsRepository } from "../repositories/posts/repository.ts";
 import { uploadRepository } from "../repositories/upload/repository.ts";
 import { CreatePostRequestData } from "../repositories/posts/types.ts";
 
-type Props = {
-    fetchPosts: () => Promise<void>;
-};
-
-export const Share = ({ fetchPosts }: Props) => {
+export const Share = () => {
     const { user } = useAuthState();
+    const { fetchPosts } = useGetPosts();
+
     const { createPost } = postsRepository;
     const { upload } = uploadRepository;
 
@@ -43,7 +42,7 @@ export const Share = ({ fetchPosts }: Props) => {
         }
 
         await createPost(newPost);
-        await fetchPosts();
+        await fetchPosts(user._id);
     };
     return (
         <form onSubmit={handleSubmit}>
