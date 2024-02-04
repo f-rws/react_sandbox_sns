@@ -1,5 +1,17 @@
-import { PutPostRequestData } from "@/repositories/posts/types.ts";
-import { Post } from "@/types/post.ts";
+import { CreatePostRequestData, PutPostRequestData } from "@/repositories/posts/types.ts";
+import { CreatePost, Post } from "@/types/post.ts";
+
+/*
+ * useCreatePost
+ */
+export const convertPostToCreatePostRequestData = (post: CreatePost): CreatePostRequestData => {
+    const { userId, desc, img } = post;
+    return {
+        userId: userId.toString(),
+        desc,
+        img,
+    };
+};
 
 /*
  * usePutPost

@@ -8,3 +8,9 @@ export type Post = {
     updatedAt: string;
     comment: number;
 };
+
+export type CreatePost = {
+    userId: number;
+    desc: string;
+    img: string;
+};

@@ -1,16 +1,16 @@
 import { FormEvent, useRef, useState } from "react";
 import { Analytics, Face, Gif, Image } from "@mui/icons-material";
+import { useCreatePost } from "@/hooks/call-api-posts/createPost.ts";
 import { useGetPosts } from "@/hooks/call-api-posts/getPosts.ts";
 import { useAuthState } from "../globalStates/authState.ts";
-import { postsRepository } from "../repositories/posts/repository.ts";
 import { uploadRepository } from "../repositories/upload/repository.ts";
-import { CreatePostRequestData } from "../repositories/posts/types.ts";
+import { CreatePost } from "@/types/post.ts";
 
 export const Share = () => {
     const { user } = useAuthState();
     const { fetchPosts } = useGetPosts();
+    const { createPost } = useCreatePost();
 
-    const { createPost } = postsRepository;
     const { upload } = uploadRepository;
 
     const [imageFile, setImageFile] = useState<FileList | null>(null);
@@ -22,8 +22,8 @@ export const Share = () => {
         if (!user) return;
         if (!ref?.current?.value) return;
 
-        const newPost: CreatePostRequestData = {
-            userId: user._id.toString(),
+        const newPost: CreatePost = {
+            userId: user._id,
             desc: ref.current.value,
             img: "",
         };
