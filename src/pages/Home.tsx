@@ -4,41 +4,34 @@ import { css } from "@emotion/react";
 import { Share } from "../components/Share.tsx";
 import { Post } from "../components/Post.tsx";
 import { Rightbar } from "../components/Rightbar.tsx";
-import { useEffect, useState } from "react";
-import { Post as TypePost } from "../types/post.ts";
+import { useEffect } from "react";
 import { useAuthState } from "../globalStates/authState.ts";
-import { postsRepository } from "../repositories/posts/repository.ts";
+import { useGetPosts } from "@/hooks/call-api-posts/getPosts.ts";
 
 export const Home = () => {
     const { user } = useAuthState();
-    const { getPosts } = postsRepository;
-
-    const [posts, setPosts] = useState<TypePost[]>([]);
+    const { posts, fetchPosts } = useGetPosts();
 
     useEffect(() => {
-        fetchPosts();
+        if (!user) return;
+        fetchPosts(user._id);
     }, []);
-
-    const fetchPosts = async () => {
-        if (!user?._id) return;
-        const data = await getPosts(user._id.toString());
-        setPosts(data);
-    };
     return (
         <>
             <Topbar />
             <div css={styles.wrapper}>
                 <div css={styles.pageLeft}>
                     <Sidebar />
-                    <Share fetchPosts={fetchPosts} />
+                    <Share />
                 </div>
                 <div css={styles.pageCenter}>
-                    {posts.map((post) => (
-                        <Post
-                            key={post._id}
-                            post={post}
-                        />
-                    ))}
+                    {posts?.length &&
+                        posts.map((post) => (
+                            <Post
+                                key={post._id}
+                                post={post}
+                            />
+                        ))}
                 </div>
                 <div css={styles.pageRight}>
                     <Rightbar />

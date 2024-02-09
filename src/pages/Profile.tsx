@@ -1,32 +1,26 @@
-import { useEffect, useState } from "react";
-import { css } from "@emotion/react";
-import { getImgPath } from "../functions/utils.ts";
-import { Post as TypePost } from "../types/post.ts";
-import { Topbar } from "../components/Topbar.tsx";
-import { Sidebar } from "../components/Sidebar.tsx";
-import { ProfileDetail } from "./ProfileDetail.tsx";
-import { Post } from "../components/Post.tsx";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { postsRepository } from "../repositories/posts/repository.ts";
+import { css } from "@emotion/react";
+import { getImgPath } from "@/functions/utils.ts";
 import { useGetUser } from "@/hooks/call-api-users/getUser.ts";
+import { useGetPostsByUser } from "@/hooks/call-api-posts/getPostsByUser.ts";
+import { Topbar } from "@/components/Topbar.tsx";
+import { Sidebar } from "@/components/Sidebar.tsx";
+import { Post } from "@/components/Post.tsx";
+import { ProfileDetail } from "./ProfileDetail.tsx";
 
 export const Profile = () => {
     const { username } = useParams();
 
-    const { getPostsByUser } = postsRepository;
     const { user, fetchUser } = useGetUser();
-    const [posts, setPosts] = useState<TypePost[]>([]);
+    const { postsByUser, fetchPostsByUser } = useGetPostsByUser();
 
     useEffect(() => {
+        if (!username) return;
         fetchUser({ username });
-        fetchPosts();
+        fetchPostsByUser(username);
     }, []);
 
-    const fetchPosts = async () => {
-        if (!username) return;
-        const data = await getPostsByUser(username);
-        setPosts(data);
-    };
     return (
         <>
             <Topbar />
@@ -53,8 +47,8 @@ export const Profile = () => {
                     </div>
                     <div css={styles.content}>
                         <div>
-                            {posts.length &&
-                                posts.map((post) => (
+                            {postsByUser?.length &&
+                                postsByUser.map((post) => (
                                     <Post
                                         key={post._id}
                                         post={post}
