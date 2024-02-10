@@ -1,13 +1,12 @@
 import { useState, FormEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { css } from "@emotion/react";
-import { colors } from "../styles/variables.ts";
-import { authRepository } from "../repositories/auth/repository.ts";
-import { ResisterUserData } from "../repositories/auth/types.ts";
+import { useRegisterUser } from "@/hooks/call-api-auth/registerUser.ts";
+import { colors } from "@/styles/variables.ts";
 
 export const Register = () => {
     const navigate = useNavigate();
-    const { resisterUser } = authRepository;
+    const { error, registerUser } = useRegisterUser();
 
     const username = useRef<HTMLInputElement>(null);
     const email = useRef<HTMLInputElement>(null);
@@ -15,34 +14,24 @@ export const Register = () => {
     const passwordConfirmation = useRef<HTMLInputElement>(null);
     const [messages, setMessages] = useState<string[]>([]);
 
-    const resetMessages = () => setMessages([]);
-
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        resetMessages();
+        setMessages([]);
 
-        if (password?.current?.value !== passwordConfirmation?.current?.value) {
+        if (!username.current || !email.current || !password.current) return;
+
+        if (password.current.value !== passwordConfirmation?.current?.value) {
             return setMessages(["パスワードが正しくありません。"]);
         }
-
-        if (username?.current?.value && email?.current?.value && password?.current?.value) {
-            const data = {
-                username: username.current.value,
-                email: email.current.value,
-                password: password.current.value,
-            };
-            execRegister(data);
-        }
-    };
-    const execRegister = async (data: ResisterUserData) => {
-        try {
-            await resisterUser(data);
-            navigate("/login");
-        } catch (e) {
-            // TODO: type修正
-            // @ts-ignore
-            setMessages([e.response.data]);
-        }
+        const data = {
+            username: username.current.value,
+            email: email.current.value,
+            password: password.current.value,
+        };
+        await registerUser(data);
+        if (error) return setMessages([error.message]);
+        // NOTE: 登録成功後はログイン画面に遷移
+        navigate("/login");
     };
     return (
         <div css={styles.wrapper}>
