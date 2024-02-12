@@ -3,8 +3,6 @@ import { User } from "../types/user.ts";
 
 type AuthState = {
     user: User | null;
-    isFetching: boolean;
-    error: boolean;
 };
 
 // TODO: type修正
@@ -15,8 +13,6 @@ const authState = atom<AuthState>({
     key: "authState",
     default: {
         user: userLocalStorage || null,
-        isFetching: false,
-        error: false,
     },
 });
 

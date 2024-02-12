@@ -6,7 +6,7 @@ export type ResisterUserRequestData = {
 };
 
 // ログイン
-export type LoginUserData = {
+export type LoginUserRequestData = {
     email: string;
     password: string;
 };
