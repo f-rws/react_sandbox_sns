@@ -5,26 +5,27 @@ import { useAuthStateMutators } from "@/globalStates/authState.ts";
 import { useLoginUser } from "@/hooks/call-api-auth/loginUser.ts";
 
 export const Login = () => {
-    const { setAuthState } = useAuthStateMutators();
-    const { user, error, loginUser } = useLoginUser();
+    const { setAuthStateAndLocalStorage } = useAuthStateMutators();
+    const { error, loginUser } = useLoginUser();
 
     const email = useRef<HTMLInputElement>(null);
     const password = useRef<HTMLInputElement>(null);
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
 
         if (!email.current || !password?.current) return;
 
-        await loginUser({
-            email: email.current.value,
-            password: password.current.value,
+        loginUser({
+            data: {
+                email: email.current.value,
+                password: password.current.value,
+            },
+            onSuccess: (user) => {
+                // NOTE: ローカルストレージにユーザー情報を保存
+                setAuthStateAndLocalStorage({ user });
+            },
         });
-        if (user) {
-            setAuthState({ user });
-            // ローカルストレージにユーザー情報を保存
-            localStorage.setItem("user", JSON.stringify(user));
-        }
     };
 
     return (

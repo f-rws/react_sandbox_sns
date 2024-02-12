@@ -5,15 +5,21 @@ import { UserData } from "@/repositories/users/types.ts";
 import { LoginUser } from "@/types/auth.ts";
 import { User } from "@/types/user.ts";
 
+type DoLoginUser = {
+    data: LoginUser;
+    onSuccess?: (user: User) => void;
+};
+
 export const useLoginUser = () => {
     const { loading, error, exec } = useCallApi<UserData>();
 
     const [user, setUser] = useState<User | null>(null);
 
-    const loginUser = async (user: LoginUser) => {
-        const data = await exec(authRepository.loginUser(user));
-        if (data) {
-            setUser(data);
+    const loginUser = async ({ data, onSuccess }: DoLoginUser) => {
+        const userData = await exec(authRepository.loginUser(data));
+        if (userData) {
+            setUser(userData);
+            onSuccess?.(userData);
         }
     };
 

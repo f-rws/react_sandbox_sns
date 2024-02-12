@@ -20,11 +20,18 @@ export const useAuthState = () => {
     return useRecoilValue(authState);
 };
 
-// TODO: ローカルストレージに保存する処理を`execLogin`から移行させる
 export const useAuthStateMutators = () => {
     const setAuthState = useSetRecoilState(authState);
+    const setUserLocalStorage = (user: User) => {
+        localStorage.setItem("user", JSON.stringify(user));
+    };
+
+    const setAuthStateAndLocalStorage = (newState: AuthState) => {
+        setAuthState(newState);
+        if (newState.user) setUserLocalStorage(newState.user);
+    };
 
     return {
-        setAuthState,
+        setAuthStateAndLocalStorage,
     };
 };
