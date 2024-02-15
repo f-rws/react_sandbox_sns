@@ -1,47 +1,31 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useRef } from "react";
 import { css } from "@emotion/react";
-import { colors } from "../styles/variables.ts";
-import { useAuthState, useAuthStateMutators } from "../globalStates/authState.ts";
-import { authRepository } from "../repositories/auth/repository.ts";
-import { LoginUserData } from "../repositories/auth/types.ts";
+import { colors } from "@/styles/variables.ts";
+import { useAuthStateMutators } from "@/globalStates/authState.ts";
+import { useLoginUser } from "@/hooks/call-api-auth/loginUser.ts";
 
 export const Login = () => {
-    const { loginUser } = authRepository;
-
-    const { user, isFetching, error } = useAuthState();
-    const { setAuthState } = useAuthStateMutators();
+    const { setAuthStateAndLocalStorage } = useAuthStateMutators();
+    const { error, loginUser } = useLoginUser();
 
     const email = useRef<HTMLInputElement>(null);
     const password = useRef<HTMLInputElement>(null);
-    const [messages, setMessages] = useState<string[] | null>(null);
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
 
-        if (email?.current?.value && password?.current?.value) {
-            const data = {
+        if (!email.current || !password?.current) return;
+
+        loginUser({
+            data: {
                 email: email.current.value,
                 password: password.current.value,
-            };
-            execLogin(data);
-        }
-    };
-    const execLogin = async (data: LoginUserData) => {
-        try {
-            const resData = await loginUser(data);
-            setAuthState({
-                isFetching,
-                error,
-                user: resData,
-            });
-
-            // ローカルストレージにユーザー情報を保存
-            localStorage.setItem("user", JSON.stringify(resData));
-        } catch (e) {
-            // TODO: type修正
-            // @ts-ignore
-            setMessages([e.response.data]);
-        }
+            },
+            onSuccess: (user) => {
+                // NOTE: ローカルストレージにユーザー情報を保存
+                setAuthStateAndLocalStorage({ user });
+            },
+        });
     };
 
     return (
@@ -66,10 +50,7 @@ export const Login = () => {
                         required={true}
                     />
                     <button>ログイン</button>
-                    {messages &&
-                        messages.map((message) => {
-                            return <p key={message}>{message}</p>;
-                        })}
+                    {error && <p>{error.message}</p>}
                     <span css={styles.forgotMessage}>パスワードを忘れた方へ</span>
                     <button>アカウント作成</button>
                 </form>

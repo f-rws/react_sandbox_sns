@@ -1,12 +1,10 @@
-// 登録
-export type ResisterUserRequestData = {
+export type RegisterUser = {
     username: string;
     email: string;
     password: string;
 };
 
-// ログイン
-export type LoginUserRequestData = {
+export type LoginUser = {
     email: string;
     password: string;
 };

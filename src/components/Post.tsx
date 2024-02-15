@@ -39,7 +39,7 @@ export const Post = ({ post }: Props) => {
 
         await updatePostLike(post._id, currentUser);
         if (error) {
-            console.log(error);
+            return console.log(error);
         }
         setLike(isLiked ? like - 1 : like + 1);
         setIsLiked(!isLiked);
