@@ -1,17 +1,16 @@
 import { FormEvent, useRef, useState } from "react";
 import { Analytics, Face, Gif, Image } from "@mui/icons-material";
+import { useAuthState } from "@/globalStates/authState.ts";
 import { useCreatePost } from "@/hooks/call-api-posts/createPost.ts";
 import { useGetPosts } from "@/hooks/call-api-posts/getPosts.ts";
-import { useAuthState } from "../globalStates/authState.ts";
-import { uploadRepository } from "../repositories/upload/repository.ts";
+import { useUpload } from "@/hooks/call-api-upload/upload.ts";
 import { CreatePost } from "@/types/post.ts";
 
 export const Share = () => {
     const { user } = useAuthState();
     const { fetchPosts } = useGetPosts();
     const { createPost } = useCreatePost();
-
-    const { upload } = uploadRepository;
+    const { execUpload } = useUpload();
 
     const [imageFile, setImageFile] = useState<FileList | null>(null);
     const ref = useRef<HTMLInputElement>(null);
@@ -30,15 +29,8 @@ export const Share = () => {
 
         // 画像がアップロードされている場合
         if (imageFile) {
-            const formData = new FormData();
             const imageFileInfo: File = imageFile[0];
-            const imageFileName = Date.now() + imageFileInfo.name;
-
-            formData.append("name", imageFileName);
-            formData.append("file", imageFileInfo);
-
-            newPost.img = imageFileName;
-            await upload(formData);
+            await execUpload(imageFileInfo);
         }
 
         await createPost(newPost);
