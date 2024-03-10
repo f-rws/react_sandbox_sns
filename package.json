@@ -1,5 +1,8 @@
 {
     "name": "mern-sns-frontend",
+    "engines": {
+        "node": "20.x"
+    },
     "private": true,
     "version": "0.0.0",
     "type": "module",
@@ -11,34 +14,34 @@
         "format": "prettier --write \"**/*.+(js|json|yml|ts|tsx)\""
     },
     "dependencies": {
-        "@emotion/react": "^11.11.1",
+        "@emotion/react": "^11.11.4",
         "@emotion/styled": "^11.11.0",
-        "@mui/icons-material": "^5.14.9",
-        "@mui/material": "^5.14.10",
-        "@mui/styled-engine-sc": "^5.14.10",
-        "axios": "^1.5.1",
+        "@mui/icons-material": "^5.15.12",
+        "@mui/material": "^5.15.12",
+        "@mui/styled-engine-sc": "^5.14.12",
+        "axios": "^1.6.7",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-router-dom": "^6.16.0",
+        "react-router-dom": "^6.22.3",
         "recoil": "^0.7.7",
         "sanitize.css": "^13.0.0",
         "styled-components": "^5.3.11",
         "timeago.js": "^4.0.2"
     },
     "devDependencies": {
-        "@types/node": "^20.10.8",
-        "@types/react": "^18.2.15",
-        "@types/react-dom": "^18.2.7",
-        "@types/recoilize": "^0.8.2",
-        "@typescript-eslint/eslint-plugin": "^6.0.0",
-        "@typescript-eslint/parser": "^6.0.0",
-        "@vitejs/plugin-react-swc": "^3.3.2",
-        "eslint": "^8.45.0",
+        "@types/node": "^20.11.25",
+        "@types/react": "^18.2.64",
+        "@types/react-dom": "^18.2.21",
+        "@types/recoilize": "^0.8.3",
+        "@typescript-eslint/eslint-plugin": "^6.21.0",
+        "@typescript-eslint/parser": "^6.21.0",
+        "@vitejs/plugin-react-swc": "^3.6.0",
+        "eslint": "^8.57.0",
         "eslint-plugin-react-hooks": "^4.6.0",
-        "eslint-plugin-react-refresh": "^0.4.3",
-        "prettier": "^3.0.3",
+        "eslint-plugin-react-refresh": "^0.4.5",
+        "prettier": "^3.2.5",
         "recoilize": "^3.2.0",
-        "typescript": "^5.0.2",
-        "vite": "^4.4.5"
+        "typescript": "^5.4.2",
+        "vite": "^4.5.2"
     }
 }
